@@ -1,0 +1,23 @@
+{
+    "name" : "multipass",
+    "description" : "http(s) port multiplexer",
+    "version" : "0.0.1",
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/bortels/multipass.git"
+    },
+    "keywords" : [
+        "http",
+        "proxy",
+        "multiplex",
+        "router"
+    ],
+    "dependencies" : {
+        "bouncy" : "3.2.1"
+    },
+    "license" : "MIT",
+    "author" : {
+        "name" : "Tom Bortels",
+        "email" : "bortels@gmail.com"
+    }
+}
