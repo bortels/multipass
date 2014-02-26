@@ -4,24 +4,45 @@ multipass
 Opinionated http(s) port multiplexer
 
 This is really just a wrapper around bouncy; we add a few things:
-1) X-Forwarded-For
-2) a simple way to edit the config on-the-fly (under construction)
+1) X-Forwarded-For headers added
+2) a simple way to edit the config on-the-fly 
 
 Usage:
 
-If your incoming port is >1024 - good on you. Modify multipass to have your port, edit the config (it's basically the same as bouncy, pairs of Host: names and ports to proxy to, as json), and party on.
+Check out the repo, run "npm install" to fetch the dependencies. 
 
-If not - you can run multipass as root if you're a damn fool. Not that I believe it's vulnerable, just that
-there's no good reason to other than being able to open port 80, and there's plenty of ways to do that without
-being root.
+Edit multipass.js if the default port of 80 doesn't work for you. 
 
-The best way, IMHO, is authbind. Details to follow here shortly. 
+Run "node multipass.js". Note that to bind to port 80, you may be
+tempted to run as root. Please - don't. There are ways to bind to
+80 without being root - authbind is my favorite, or you can use
+ipfw to forward 80 to a port higher than 1024. Google it!
 
-On recent linux (kernel 2.6.24 or later - that's rhel/centos 6) - you can use "setcap" as follows:
+You probably will want to run this under forever or pm2. 
 
-setcap 'cap_net_bind_service=+ep' /path/to/program
+Configuration:
 
-/path/to/program in this case is node - keep in mind if you do this, node programs in general will be able to
-open ports less than 1025.
+The config file is pure bouncy - a simple json collection of strings
+to match to the "Host:" header, and the destination to connect it to
+(usually another port on localhost). Note that "" is the default route
+in case there is no host header that matches (or at all).
 
-Other options are to mess with firewall rules, use nc to forward the port (but now nc is running as root).
+You will notice there's a key there that's got "config" as the destination;
+that's the way you can talk to multipass itself, by POSTing data to it.
+
+An example is worth a thousand words - you can use curl to talk to it:
+
+curl -H "Host: config.whatever" -X POST http://localhost:80 -d "COMMAND"
+
+where config.whatever is the config route in the json config,
+and COMMAND is one of the following:
+
+|list|Shows the running configuration|
+|save|Saves the running configuration to disk|
+|add HOST DESTINATION|Adds an entry for HOST pointing to DESTINATION|
+|del HOST|Deletest the entry for HOST|
+
+A note on pronunciation:
+
+The cool kids pronounce it "mool-tee-pahss".
+If you never saw "The Fifth Element" - go see it.

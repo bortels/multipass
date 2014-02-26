@@ -11,18 +11,52 @@ var port = 80;
 var address = '0.0.0.0';
 var fs = require('fs');
 
-var config = { };
-if (fs.existsSync(configFile)) {
-   config = JSON.parse(fs.readFileSync(configFile));
-} else {
-   config = JSON.parse('{ "port": 80 }');
-}
+var config = JSON.parse(fs.readFileSync(configFile));
 
 var bouncy = require('bouncy');
 var server = bouncy(function (req, res, bounce) {
     var host = (req.headers.host || '').replace(/:\d+$/, '');
     var route = config[host] || config[''];
     var opt =  { headers : { 'X-Forwarded-For' : req.connection.remoteAddress || req.socket.remoteAddress } };
+
+    function doconfig (data) {
+      var d = String.fromCharCode.apply(null, new Uint16Array(data)); // jebus, gotta be a nicer way
+      var ds = d.toLowerCase().split(/\s+/);
+      var cmd = ds.shift();
+      var key = ds.shift();
+      var dest = ds.shift();
+      res.statuscode = 404;
+      var result = "Unknown Command";
+      if (cmd == "add") { // or replace, I guess...
+         config[key] = dest;
+         res.statusCode = 200;
+         result = "Added " + key + " => " + dest;
+      }  
+      if (cmd == "del") {
+         if (typeof config[key] != "undefined") {
+            config[key] = undefined;
+            res.statuscode=200;
+            result = "Deleted " + key;
+         } else {
+            result = "Not Found"; 
+         }
+      }
+      if (cmd == "list") {
+         res.statuscode=200;
+         result = JSON.stringify(config, null, 2);
+      }
+      if (cmd == "save") {
+         res.statuscode=200;
+         result = "Saved";
+         try { fs.writeFileSync(configFile, JSON.stringify(config, null, 2)); } // yes, synchronous. Sorry.
+         catch (e) {
+            res.statuscode=403; // guessing
+            result = "Write Failed"; 
+            }
+      }
+      res.setHeader('content-type', 'text/plain');
+      res.end(result + '\r\n');
+    }
 
     if (Array.isArray(route)) {
         // jump to a random route on arrays
@@ -42,7 +76,11 @@ var server = bouncy(function (req, res, bounce) {
             ? bounce(s[0], s[1], opt)
             : bounce(s, opt)
         ;
-        b.on('error', onerror);
+        if (route == 'config') {
+           req.on('data', doconfig);
+        } else {
+           b.on('error', onerror);
+        }
     }
     else if (route) {
         bounce(route, opt).on('error', onerror);
