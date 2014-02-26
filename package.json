@@ -1,10 +1,10 @@
 {
-    "name" : "multipass",
+    "name" : "multiport",
     "description" : "http(s) port multiplexer",
     "version" : "0.0.1",
     "repository" : {
         "type" : "git",
-        "url" : "git://github.com/bortels/multipass.git"
+        "url" : "git://github.com/bortels/multiport.git"
     },
     "keywords" : [
         "http",

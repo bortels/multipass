@@ -6,7 +6,7 @@
 
 // If you run me as root, you're a fool. See the README
 
-var configFile = "multipass.json";
+var configFile = "multiport.json";
 var port = 80;
 var address = '0.0.0.0';
 var fs = require('fs');
