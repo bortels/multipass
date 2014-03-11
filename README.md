@@ -26,7 +26,7 @@ You probably will want to run this under forever or pm2.
 
 The config file is pure bouncy - a simple json collection of strings
 to match to the "Host:" header, and the destination to connect it to
-(usually another port on localhost). "DEFAULT" the default route
+(usually another port on localhost). "default" the default route
 in case there is no host header that matches.
 
 You will notice there's a key there that's got "config" as the destination;
