@@ -16,7 +16,7 @@ var config = JSON.parse(fs.readFileSync(configFile));
 var bouncy = require('bouncy');
 var server = bouncy(function (req, res, bounce) {
     var host = (req.headers.host || '').replace(/:\d+$/, '');
-    var route = config[host] || config['DEFAULT'];
+    var route = config[host] || config['default'];
     var opt =  { headers : { 'X-Forwarded-For' : req.connection.remoteAddress || req.socket.remoteAddress } };
 
     function doconfig (data) {
