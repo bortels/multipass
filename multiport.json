@@ -2,5 +2,5 @@
    "config.coreos1.dca.diginsite.net": "config",
    "test.coreos1.dca.diginsite.net": 3000,
    "node-red.coreos1.dca.diginsite.net": 1880,
-   "DEFAULT": 8080
+   "default": 8080
 }
