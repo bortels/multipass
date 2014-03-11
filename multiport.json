@@ -1,5 +1,6 @@
 {
-   "test.bpi.dcb.diginsite.net": 3000,
-   "todo.bpi.dcb.diginsite.net": 8081,
-   "": 8080
+   "config.coreos1.dca.diginsite.net": "config",
+   "test.coreos1.dca.diginsite.net": 3000,
+   "node-red.coreos1.dca.diginsite.net": 1880,
+   "DEFAULT": 8080
 }

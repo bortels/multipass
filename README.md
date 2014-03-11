@@ -26,8 +26,8 @@ You probably will want to run this under forever or pm2.
 
 The config file is pure bouncy - a simple json collection of strings
 to match to the "Host:" header, and the destination to connect it to
-(usually another port on localhost). Note that "" is the default route
-in case there is no host header that matches (or at all).
+(usually another port on localhost). "DEFAULT" the default route
+in case there is no host header that matches.
 
 You will notice there's a key there that's got "config" as the destination;
 that's the way you can talk to multiport itself, by POSTing data to it.
@@ -45,6 +45,9 @@ and COMMAND is one of the following:
 | -------------------- | ---------------------------------------------- |
 | list                 | Shows the running configuration                |
 | save                 | Saves the running configuration to disk        |
-| add HOST DESTINATION | Adds an entry for HOST pointing to DESTINATION |
-| del HOST             | Deletest the entry for HOST                    |
+| add HOST DESTINATION | Adds (or replaces) an entry for HOST pointing to DESTINATION |
+| del HOST             | Deletes the entry for HOST                    |
 
+You *really* should replace the config file in this repo with your own;
+anyone who manages to land a connection to your server could pass their own
+Host: header and get to your config if you keep this one. Fair warning.
